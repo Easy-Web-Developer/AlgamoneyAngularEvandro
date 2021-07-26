@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { URLSearchParams } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import * as moment from 'moment';
+
+export interface LancamentoFiltro {
+  descricao: string;
+  dataVencimentoInicio: Date;
+  dataVencimentoFim: Date;
+}
 
 @Injectable()
 export class LancamentoService {
@@ -10,12 +18,27 @@ export class LancamentoService {
 
   constructor(private http: Http) { }
 
-  pesquisar(): Promise<any> {
-    
+  pesquisar(filtro: LancamentoFiltro): Promise<any> {
+    const params = new URLSearchParams;
     const headers = new Headers();
     headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
    
-    return this.http.get(`${this.lancamentosUrl}?resumo`)
+    if (filtro.descricao) {
+      params.set('descricao', filtro.descricao);
+    }
+
+    if (filtro.dataVencimentoInicio){
+      params.set('dataVencimentoDe', 
+        moment(filtro.dataVencimentoInicio).format('YYYY-MM-DD'));
+    }
+
+    if (filtro.dataVencimentoFim){
+      params.set('dataVencimentoAte', 
+        moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
+    }
+
+    return this.http.get(`${this.lancamentosUrl}?resumo`, 
+        { search:params })
       .toPromise()
       .then(response => response.json())
       
