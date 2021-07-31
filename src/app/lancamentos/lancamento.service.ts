@@ -5,10 +5,12 @@ import { URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import * as moment from 'moment';
 
-export interface LancamentoFiltro {
+export class LancamentoFiltro {
   descricao: string;
   dataVencimentoInicio: Date;
   dataVencimentoFim: Date;
+  pagina = 0;
+  itensPorPagina = 5;
 }
 
 @Injectable()
@@ -22,33 +24,51 @@ export class LancamentoService {
     const params = new URLSearchParams;
     const headers = new Headers();
     headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-   
+
+    params.set('page', filtro.pagina.toString());
+    params.set('size', filtro.itensPorPagina.toString());
+
     if (filtro.descricao) {
       params.set('descricao', filtro.descricao);
     }
 
-    if (filtro.dataVencimentoInicio){
-      params.set('dataVencimentoDe', 
+    if (filtro.dataVencimentoInicio) {
+      params.set('dataVencimentoDe',
         moment(filtro.dataVencimentoInicio).format('YYYY-MM-DD'));
     }
 
-    if (filtro.dataVencimentoFim){
-      params.set('dataVencimentoAte', 
+    if (filtro.dataVencimentoFim) {
+      params.set('dataVencimentoAte',
         moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
     }
 
-    return this.http.get(`${this.lancamentosUrl}?resumo`, 
-        { search:params })
+    return this.http.get(`${this.lancamentosUrl}?resumo`,
+      { search: params })
       .toPromise()
-      .then(response => response.json())
-      
+      .then(response => {
+        const responseJson = response.json();
+        const lancamentos = responseJson.content;
 
-    // .toPromise()
-    // .then(response => {
-    //   console.log(response.json());
-    // })
-   
-    }
+        const resultado = {
+          lancamentos: lancamentos,
+          total: responseJson.totalElements
+        };
+
+        return resultado;
+      })
   }
-  
+
+
+  excluir(codigo: number): Promise<void> {
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+
+    return this.http.delete(`${this.lancamentosUrl}/${codigo}`)
+      .toPromise()
+      .then(() => null);
+  }
+
+
+}
+
 

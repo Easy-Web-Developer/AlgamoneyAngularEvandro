@@ -6,7 +6,6 @@ import { PessoaCadastroComponent } from './pessoa-cadastro/pessoa-cadastro.compo
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
 import { SharedModule } from './../shared/shared.module';
 
-
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { ButtonModule } from 'primeng/components/button/button';
 import { DataTableModule } from 'primeng/components/datatable/datatable';

@@ -10,17 +10,17 @@
       <div class="ui-g-12 ui-fluid">
         <label>Descrição</label>
         <input pInputText type="text" name="descricao" 
-          [(ngModel)]="descricao">
+          [(ngModel)]="filtro.descricao">
       </div>
 
       <div class="ui-g-12">
         <label style="display: block">Vencimento</label>
         <p-calendar dateFormat="dd/mm/yy" [inputStyle]="{ width: '95px' }"
-          name="vencimentoInicio" [(ngModel)]="dataVencimentoInicio"></p-calendar>
+          name="vencimentoInicio" [(ngModel)]="filtro.dataVencimentoInicio"></p-calendar>
 
         <label>até</label>
         <p-calendar dateFormat="dd/mm/yy" [inputStyle]="{ width: '95px' }"
-        name="vencimentoFim" [(ngModel)]="dataVencimentoFim"></p-calendar>
+        name="vencimentoFim" [(ngModel)]="filtro.dataVencimentoFim"></p-calendar>
       </div>
 
       <div class="ui-g-12">
@@ -32,8 +32,13 @@
 
   <div class="ui-g">
     <div class="ui-g-12">
-      <p-dataTable [value]="lancamentos" [paginator]="true" [rows]="10" 
-          [responsive]="true" emptyMessage="Nenhum lançamento encontrado">
+      <p-dataTable [value]="lancamentos"  
+          [responsive]="true" 
+          emptyMessage="Nenhum lançamento encontrado"
+          [paginator]="true" [rows]="filtro.itensPorPagina"
+          [lazy]="true" [totalRecords]="totalRegistros" 
+          (onLazyLoad)="aoMudarPagina($event)"
+          #tabela>
         <p-column field="pessoa.nome" header="Pessoa"></p-column>
         <p-column field="descricao" header="Descrição"></p-column>
 
@@ -58,9 +63,11 @@
         </p-column>
 
         <p-column styleClass="col-acoes">
-          <ng-template pTemplate="body">
+          <ng-template let-lanc="rowData" pTemplate="body">
             <a pButton icon="fa-pencil" pTooltip="Editar" tooltipPosition="top"></a>
-            <button pButton icon="fa-trash" pTooltip="Excluir" tooltipPosition="top"></button>
+            <button pButton icon="fa-trash" 
+              pTooltip="Excluir" tooltipPosition="top"
+              (click)="confirmarExclusao(lanc)"></button>
           </ng-template>
         </p-column>
       </p-dataTable>
