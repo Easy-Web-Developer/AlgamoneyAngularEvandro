@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { URLSearchParams } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
@@ -46,13 +46,28 @@ export class PessoaService {
 
   }
 
-  listarTodas(): Promise<any> {
+
+  excluir(codigo: number): Promise<void>{
     const headers = new Headers();
     headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
 
-    return this.http.get(this.pessoasUrl)
+    return this.http.delete(`${this.pessoasUrl}/${codigo}`)
       .toPromise()
-      .then(response => response.json().content)
+      .then(() => null);
   }
+
+
+
+  mudarStatus(codigo:number, ativo:boolean):Promise<void>{
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.put(`${this.pessoasUrl}/${codigo}/ativo`, ativo, { headers })
+    .toPromise()
+    .then(() => null);
+  }
+
+
 
 }
