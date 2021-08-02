@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { URLSearchParams } from '@angular/http';
+import { Pessoa } from 'app/core/model';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -57,6 +58,15 @@ export class PessoaService {
   }
 
 
+  listarTodas(): Promise<any> {
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+
+    return this.http.get(this.pessoasUrl, { headers })
+      .toPromise()
+      .then(response => response.json().content);
+  }
+
 
   mudarStatus(codigo:number, ativo:boolean):Promise<void>{
     const headers = new Headers();
@@ -69,5 +79,15 @@ export class PessoaService {
   }
 
 
+  adicionar(pessoa: Pessoa): Promise<Pessoa>{
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(this.pessoasUrl,
+        JSON.stringify(pessoa), { headers })
+     .toPromise()
+     .then(response => response.json());   
+  }
 
 }

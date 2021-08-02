@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { URLSearchParams } from '@angular/http';
+import { URLSearchParams, Headers } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import * as moment from 'moment';
+
+import { Lancamento } from 'app/core/model';
 
 export class LancamentoFiltro {
   descricao: string;
@@ -68,7 +70,17 @@ export class LancamentoService {
       .then(() => null);
   }
 
+  adicionar(lancamento: Lancamento): Promise<Lancamento>{
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    headers.append('Content-Type', 'application/json');
+
+    return this.http.post(this.lancamentosUrl,
+        JSON.stringify(lancamento), { headers })
+      .toPromise()
+      .then(response => response.json()); 
+  } 
+
 
 }
-
 
