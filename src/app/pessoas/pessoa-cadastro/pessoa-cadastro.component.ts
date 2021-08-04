@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { ErrorHandlerService } from 'app/core/error-handler.service';
 import { ToastyService } from 'ng2-toasty';
 import { PessoaService } from './../pessoa.service';
@@ -17,10 +18,28 @@ export class PessoaCadastroComponent implements OnInit {
   constructor(
     private pessoaService: PessoaService,
     private toasty: ToastyService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    const codigoPessoa = this.route.snapshot.params['codigo'];
+
+    if (codigoPessoa) {
+      this.carregarPessoa(codigoPessoa);
+    }
+  }
+
+  get editando() {
+    return Boolean(this.pessoa.codigo)
+  }
+
+  carregarPessoa(codigo: number) {
+    this.pessoaService.buscarPorCodigo(codigo)
+      .then(pessoa => {
+        this.pessoa = pessoa;
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   salvar(form: FormControl){

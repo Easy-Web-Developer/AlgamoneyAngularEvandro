@@ -5,6 +5,7 @@ import { ToastyService } from 'ng2-toasty';
 
 import { PessoaFiltro, PessoaService } from '../pessoa.service';
 import { ErrorHandlerService } from 'app/core/error-handler.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -27,9 +28,10 @@ export class PessoasPesquisaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    
   }
 
+  
   pesquisar(pagina = 0) {
     this.filtro.pagina = pagina;
 
