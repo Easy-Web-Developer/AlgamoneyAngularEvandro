@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { SharedModule } from './../shared/shared.module';
+import { LancamentosRoutingModule } from './lancamentos-routing.module';
 
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { ButtonModule } from 'primeng/components/button/button';
@@ -14,14 +15,12 @@ import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtexta
 import { CalendarModule } from 'primeng/components/Calendar/Calendar';
 import { SelectButtonModule } from 'primeng/components/selectbutton/selectbutton';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
-import { RouterModule } from '@angular/router';
 
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
 
     InputTextModule,
     ButtonModule,
@@ -32,15 +31,13 @@ import { RouterModule } from '@angular/router';
     SelectButtonModule,
     DropdownModule,
 
-    SharedModule
+    SharedModule,
+    LancamentosRoutingModule
   ],
   declarations: [
     LancamentoCadastroComponent,
     LancamentosPesquisaComponent
   ],
-  exports:[
-    LancamentoCadastroComponent,
-    LancamentosPesquisaComponent
-  ]
+  exports:[]
 })
 export class LancamentosModule { }

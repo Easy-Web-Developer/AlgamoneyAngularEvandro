@@ -6,6 +6,7 @@ import { ToastyService } from 'ng2-toasty';
 import { PessoaFiltro, PessoaService } from '../pessoa.service';
 import { ErrorHandlerService } from 'app/core/error-handler.service';
 import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -24,11 +25,12 @@ export class PessoasPesquisaComponent implements OnInit {
     private pessoaService: PessoaService,
     private errorHandler: ErrorHandlerService,
     private toasty: ToastyService,
-    private confirmation: ConfirmationService
+    private confirmation: ConfirmationService,
+    private title: Title
   ) { }
 
   ngOnInit() {
-    
+    this.title.setTitle('Pesquisa de pessoas');
   }
 
   
