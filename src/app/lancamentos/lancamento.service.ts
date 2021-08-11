@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { URLSearchParams, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
+import { URLSearchParams } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import * as moment from 'moment';
 
 import { Lancamento } from 'app/core/model';
+import { AuthService } from 'app/seguranca/auth.service';
 
 export class LancamentoFiltro {
   descricao: string;
@@ -20,15 +21,20 @@ export class LancamentoService {
 
   lancamentosUrl = 'http://localhost:8080/lancamentos';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {}
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
     const params = new URLSearchParams;
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-
+    
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
+    
     params.set('page', filtro.pagina.toString());
     params.set('size', filtro.itensPorPagina.toString());
+
 
     if (filtro.descricao) {
       params.set('descricao', filtro.descricao);
@@ -45,7 +51,7 @@ export class LancamentoService {
     }
 
     return this.http.get(`${this.lancamentosUrl}?resumo`,
-      { search: params })
+      { search: params, headers: header })
       .toPromise()
       .then(response => {
         const responseJson = response.json();
@@ -55,39 +61,46 @@ export class LancamentoService {
           lancamentos: lancamentos,
           total: responseJson.totalElements
         };
-
+        
         return resultado;
       })
   }
-
+  
 
   excluir(codigo: number): Promise<void> {
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.delete(`${this.lancamentosUrl}/${codigo}`)
+    return this.http.delete(`${this.lancamentosUrl}/${codigo}`, { headers: header })
       .toPromise()
       .then(() => null);
   }
 
   adicionar(lancamento: Lancamento): Promise<Lancamento>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-    headers.append('Content-Type', 'application/json');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
     return this.http.post(this.lancamentosUrl,
-        JSON.stringify(lancamento), { headers })
+        JSON.stringify(lancamento), { headers: header })
       .toPromise()
       .then(response => response.json()); 
   } 
 
   atualizar(lancamento: Lancamento): Promise<Lancamento> {
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-    headers.append('Content-Type', 'application/json');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
     return this.http.put(`${this.lancamentosUrl}/${lancamento.codigo}`,
-      JSON.stringify(lancamento), { headers })
+      JSON.stringify(lancamento), { headers: header })
      .toPromise()
      .then(Response => {
        const lancamentoAlterado = Response.json() as Lancamento;
@@ -99,10 +112,13 @@ export class LancamentoService {
   }
 
   buscarPorCodigo(codigo: number): Promise<Lancamento>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.get(`${this.lancamentosUrl}/${codigo}`, { headers })
+    return this.http.get(`${this.lancamentosUrl}/${codigo}`, { headers: header })
       .toPromise()
       .then(response => {
         const lancamento = response.json() as Lancamento;

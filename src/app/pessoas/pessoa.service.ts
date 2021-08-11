@@ -20,8 +20,11 @@ export class PessoaService {
 
   pesquisar(filtro: PessoaFiltro): Promise<any> {
     const params = new URLSearchParams;
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
     params.set('page', filtro.pagina.toString());
     params.set('size', filtro.itensPorPagina.toString());
@@ -31,7 +34,7 @@ export class PessoaService {
     }
 
     return this.http.get(`${this.pessoasUrl}`, 
-        { search:params })
+        { search: params, headers: header })
       .toPromise()
       .then(response => {
         const responseJson = response.json();
@@ -49,54 +52,66 @@ export class PessoaService {
 
 
   excluir(codigo: number): Promise<void>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.delete(`${this.pessoasUrl}/${codigo}`)
+    return this.http.delete(`${this.pessoasUrl}/${codigo}`, {headers: header})
       .toPromise()
       .then(() => null);
   }
 
 
   listarTodas(): Promise<any> {
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.get(this.pessoasUrl, { headers })
+    return this.http.get(this.pessoasUrl, { headers: header })
       .toPromise()
       .then(response => response.json().content);
   }
 
 
   mudarStatus(codigo:number, ativo:boolean):Promise<void>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-    headers.append('Content-Type', 'application/json');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.put(`${this.pessoasUrl}/${codigo}/ativo`, ativo, { headers })
+    return this.http.put(`${this.pessoasUrl}/${codigo}/ativo`, ativo, { headers: header })
     .toPromise()
     .then(() => null);
   }
 
 
   adicionar(pessoa: Pessoa): Promise<Pessoa>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-    headers.append('Content-Type', 'application/json');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
     return this.http.post(this.pessoasUrl,
-        JSON.stringify(pessoa), { headers })
+        JSON.stringify(pessoa), { headers: header })
      .toPromise()
      .then(response => response.json());   
   }
 
   atualizar(pessoa: Pessoa): Promise<Pessoa>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
-    headers.append('Content-Type', 'application/json');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
     return this.http.put(`${this.pessoasUrl}/${pessoa.codigo}`,
-      JSON.stringify(pessoa), { headers })
+      JSON.stringify(pessoa), { headers: header })
      .toPromise()
      .then(response => {
        const pessoaAlterada = response.json() as Pessoa;
@@ -106,10 +121,13 @@ export class PessoaService {
   }
 
   buscarPorCodigo(codigo: number): Promise<Pessoa>{
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.get(`${this.pessoasUrl}/${codigo}`, { headers })
+    return this.http.get(`${this.pessoasUrl}/${codigo}`, { headers: header })
       .toPromise()
       .then(response => {
         const pessoa = response.json() as Pessoa;

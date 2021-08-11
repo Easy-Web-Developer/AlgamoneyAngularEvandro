@@ -12,10 +12,13 @@ export class CategoriaService {
   constructor(private http: Http) { }
 
   listarTodas(): Promise<any> {
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const token = localStorage.getItem('token');
+    const header = new Headers({
+      'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
+    });
 
-    return this.http.get(this.categoriasUrl)
+    return this.http.get(this.categoriasUrl, { headers: header })
       .toPromise()
       .then(response => response.json());
   }

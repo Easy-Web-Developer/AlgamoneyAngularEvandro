@@ -1,4 +1,3 @@
-import { AppRoutingModule } from './app-routing.module';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,6 +7,9 @@ import { AppComponent } from './app.component';
 import { LancamentosModule } from './lancamentos/lancamentos.module';
 import { PessoasModule } from './pessoas/pessoas.module';
 import { CoreModule } from './core/core.module';
+import { SegurancaModule } from './seguranca/seguranca.module';
+import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 @NgModule({
@@ -18,11 +20,13 @@ import { CoreModule } from './core/core.module';
     BrowserModule,
     BrowserAnimationsModule, 
     HttpModule,
+    HttpClientModule,
 
     LancamentosModule,
     PessoasModule,
     CoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SegurancaModule    
 
     
   ],

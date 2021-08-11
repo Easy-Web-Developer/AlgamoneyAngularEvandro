@@ -1,5 +1,6 @@
-import { CategoriaService } from './../categorias/categoria.service';
 
+import { Title } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,9 +12,10 @@ import { PessoaService } from './../pessoas/pessoa.service';
 import { LancamentoService } from './../lancamentos/lancamento.service';
 import { ErrorHandlerService } from './error-handler.service';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RouterModule } from '@angular/router';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
-import { Title } from '@angular/platform-browser';
+import { AuthService } from 'app/seguranca/auth.service';
+import { CategoriaService } from './../categorias/categoria.service';
+import { JwtHelper } from 'angular2-jwt';
 
 @NgModule({
   imports: [
@@ -24,7 +26,8 @@ import { Title } from '@angular/platform-browser';
     ConfirmDialogModule,
   ],
   declarations: [NavbarComponent, PaginaNaoEncontradaComponent],
-  exports: [NavbarComponent,
+  exports: [
+            NavbarComponent,
             ToastyModule,
             ConfirmDialogModule
   ],
@@ -33,8 +36,10 @@ import { Title } from '@angular/platform-browser';
     PessoaService,
     CategoriaService,
     ErrorHandlerService,
+    AuthService,
 
     ConfirmationService,
+    JwtHelper,
     Title,
     { provide: LOCALE_ID, useValue: 'pt-BR' } 
     

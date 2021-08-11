@@ -38,6 +38,7 @@ import { DropdownModule } from 'primeng/components/dropdown/dropdown';
     LancamentoCadastroComponent,
     LancamentosPesquisaComponent
   ],
+  providers: [],
   exports:[]
 })
 export class LancamentosModule { }
